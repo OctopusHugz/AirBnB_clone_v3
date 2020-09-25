@@ -16,5 +16,8 @@ $(document).ready(function () {
         $('.amenities h4').append(', ');
       }
     });
+    if (amenityDictLength === 0) {
+      $('.amenities h4').append('&nbsp;');
+    }
   });
 });
