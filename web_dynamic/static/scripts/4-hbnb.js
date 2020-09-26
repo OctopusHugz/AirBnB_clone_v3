@@ -18,8 +18,8 @@ $(document).ready(function () {
     data: JSON.stringify({ body: {} }),
     dataType: 'json',
     contentType: 'application/json',
-    success: function (data) {
-      data.forEach((place) => {
+    success: function (response) {
+      response.forEach((place) => {
         $(htmlString).appendTo('section.places');
         $('.title_box h2').last().html(place.name);
         $('.title_box .price_by_night')
@@ -66,7 +66,6 @@ $(document).ready(function () {
       dataType: 'json',
       contentType: 'application/json',
       success: function (response) {
-        console.log(response);
         $('section.places').empty();
         response.forEach((place) => {
           $(htmlString).appendTo('section.places');

@@ -1,6 +1,7 @@
 const $ = window.$;
 const amenityDict = {};
-const locationDict = {};
+const stateDict = {};
+const cityDict = {};
 const titleString = '<article><div class="title_box"><h2></h2><div class="price_by_night"></div></div>';
 const infoString = '<div class="information"><div class="max_guest"></div><div class="number_rooms"></div><div class="number_bathrooms"></div></div>';
 const descString = '<div class="description"></div></article>';
@@ -21,8 +22,8 @@ $(document).ready(function () {
     data: JSON.stringify({ body: {} }),
     dataType: 'json',
     contentType: 'application/json',
-    success: function (data) {
-      data.forEach((place) => {
+    success: function (response) {
+      response.forEach((place) => {
         $(htmlString).appendTo('section.places');
         $('.title_box h2').last().html(place.name);
         $('.title_box .price_by_night')
@@ -48,51 +49,44 @@ $(document).ready(function () {
     } else {
       delete amenityDict[$(this).attr('data-id')];
     }
-    $('.amenities h4').empty();
-    const amenityDictKeys = Object.keys(amenityDict);
-    const amenityDictLength = amenityDictKeys.length;
-    amenityDictKeys.forEach(function (key, index) {
-      $('.amenities h4').append(amenityDict[key]);
-      if (index !== amenityDictLength - 1) {
-        $('.amenities h4').append(', ');
-      }
-    });
-    if (amenityDictLength === 0) {
-      $('.amenities h4').append('&nbsp;');
-    }
+    printFunc(amenityDict);
   });
   // listens to state checkboxes and populates state filter
-  $('.locations li input').click(function () {
+  $('.state').click(function () {
     if (this.checked) {
-      locationDict[$(this).attr('data-id')] = $(this).attr('data-name');
+      stateDict[$(this).attr('data-id')] = $(this).attr('data-name');
     } else {
-      delete locationDict[$(this).attr('data-id')];
+      delete stateDict[$(this).attr('data-id')];
     }
-    $('.location h4').empty();
-    const locationDictKeys = Object.keys(locationDict);
-    const locationDictLength = locationDictKeys.length;
-    locationDictKeys.forEach(function (key, index) {
-      $('.location h4').append(locationDict[key]);
-      if (index !== locationDictLength - 1) {
-        $('.location h4').append(', ');
-      }
-    });
-    if (locationDictLength === 0) {
-      $('.location h4').append('&nbsp;');
+    printFunc(stateDict);
+  });
+  // listens to city checkboxes and populates cities filter
+  $('.city').click(function () {
+    if (this.checked) {
+      cityDict[$(this).attr('data-id')] = $(this).attr('data-name');
+    } else {
+      delete cityDict[$(this).attr('data-id')];
+    }
+    if (Object.keys(stateDict).length === 0) {
+      printFunc(cityDict);
     }
   });
   // post request if button is clicked to filter place results
   $('button').click(function () {
     const amenityDictKeys = Object.keys(amenityDict);
-    const locationDictKeys = Object.keys(locationDict);
+    const stateDictKeys = Object.keys(stateDict);
+    const cityDictKeys = Object.keys(cityDict);
     $.ajax({
       type: 'POST',
       url: 'http://0.0.0.0:5001/api/v1/places_search/',
-      data: JSON.stringify({ amenities: amenityDictKeys, location: locationDictKeys }),
+      data: JSON.stringify({
+        amenities: amenityDictKeys,
+        states: stateDictKeys,
+        cities: cityDictKeys
+      }),
       dataType: 'json',
       contentType: 'application/json',
       success: function (response) {
-        console.log(response);
         $('section.places').empty();
         response.forEach((place) => {
           $(htmlString).appendTo('section.places');
@@ -115,3 +109,29 @@ $(document).ready(function () {
     });
   });
 });
+
+function printFunc (dictionary) {
+  let elementName = '.locations h4';
+  if (dictionary === amenityDict) {
+    elementName = '.amenities h4';
+  }
+  $(elementName).empty();
+  const dictKeys = Object.keys(dictionary);
+  const dictLength = dictKeys.length;
+  dictKeys.forEach(function (key, index) {
+    $(elementName).append(dictionary[key]);
+    if (index !== dictLength - 1) {
+      $(elementName).append(', ');
+    }
+  });
+  if (dictLength === 0) {
+    $(elementName).append('&nbsp;');
+    if (dictionary === stateDict) {
+      $('.locations h3').html('Cities');
+      printFunc(cityDict);
+    }
+    if (dictionary === cityDict) {
+      $('.locations h3').html('States');
+    }
+  }
+}
