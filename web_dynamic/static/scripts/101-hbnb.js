@@ -48,6 +48,7 @@ function placesSearch (data) {
         const reviewUrl =
           'http://0.0.0.0:5001/api/v1/places/' + place.id + '/reviews';
         const reviewListID = 'review_list_' + place.id;
+	// Need to refactor this so we can get count for Reviews in header, and maybe remove show/hide if review count is 0
         const outerHTML =
           '<h2>Reviews</h2><span class="hide">Show</span>' +
           '<ul id="' +
@@ -107,12 +108,12 @@ function fillElementWith (dictionary) {
   });
   if (dictLength === 0) {
     $(elementName).append('&nbsp;');
-    if (dictionary === stateDict) {
+  }
+  if (dictionary === stateDict) {
+    $('.locations h3').html('States');
+    if (dictLength === 0) {
       $('.locations h3').html('Cities');
       fillElementWith(cityDict);
-    }
-    if (dictionary === cityDict) {
-      $('.locations h3').html('States');
     }
   }
 }
