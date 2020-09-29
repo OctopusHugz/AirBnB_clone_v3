@@ -95,9 +95,9 @@ function placesSearch (data) {
                 );
               });
               if (response.length === 1) {
-                $('#' + reviewPlaceID + ' h2').html(response.length + 'Review');
+                $('#' + reviewPlaceID + ' h2').html(response.length + ' Review');
               } else {
-                $('#' + reviewPlaceID + ' h2').html(response.length + 'Reviews');
+                $('#' + reviewPlaceID + ' h2').html(response.length + ' Reviews');
               }
             });
             $(this).removeClass('hide').addClass('show');
