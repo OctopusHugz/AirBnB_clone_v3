@@ -31,15 +31,18 @@ button:hover {
     font-weight: 600;
 }
 .filters h3 {
-    margin-left: 15%;
+    margin-left: 15px;
     margin-bottom: 0;
     font-weight: 600;
 }
 .filters h4 {
-    margin-left: 15%;
+    margin-left: 15px;
     margin-top: 0;
     font-weight: 400;
     font-size: 14px;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .locations {
     height: 100%;

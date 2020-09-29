@@ -35,20 +35,37 @@ function placesSearch (data) {
         $('.title_box .price_by_night')
           .last()
           .html('$' + place.price_by_night);
-        $('.information .max_guest')
-          .last()
-          .html(place.max_guest + ' Guests');
-        $('.information .number_rooms')
-          .last()
-          .html(place.number_rooms + ' Rooms');
-        $('.information .number_bathrooms')
-          .last()
-          .html(place.number_bathrooms + ' Bathrooms');
+        if (place.max_guest === 1) {
+          $('.information .max_guest')
+            .last()
+            .html(place.max_guest + ' Guest');
+        } else {
+          $('.information .max_guest')
+            .last()
+            .html(place.max_guest + ' Guests');
+        }
+        if (place.number_rooms === 1) {
+          $('.information .number_rooms')
+            .last()
+            .html(place.number_rooms + ' Room');
+        } else {
+          $('.information .number_rooms')
+            .last()
+            .html(place.number_rooms + ' Rooms');
+        }
+        if (place.number_bathrooms === 1) {
+          $('.information .number_bathrooms')
+            .last()
+            .html(place.number_bathrooms + ' Bathroom');
+        } else {
+          $('.information .number_bathrooms')
+            .last()
+            .html(place.number_bathrooms + ' Bathrooms');
+        }
         $('.description').last().html(place.description);
         const reviewUrl =
           'http://0.0.0.0:5001/api/v1/places/' + place.id + '/reviews';
         const reviewListID = 'review_list_' + place.id;
-	// Need to refactor this so we can get count for Reviews in header, and maybe remove show/hide if review count is 0
         const outerHTML =
           '<h2>Reviews</h2><span class="hide">Show</span>' +
           '<ul id="' +
@@ -66,7 +83,6 @@ function placesSearch (data) {
                 const month = getMonth(monthString);
                 const reviewTitleString = '';
                 const innerHTML = '';
-                // Can we define the vars above at the top of script so they can be removed from function prototype?
                 setUserName(
                   review,
                   review.user_id,
@@ -78,6 +94,11 @@ function placesSearch (data) {
                   reviewListID
                 );
               });
+              if (response.length === 1) {
+                $('#' + reviewPlaceID + ' h2').html(response.length + 'Review');
+              } else {
+                $('#' + reviewPlaceID + ' h2').html(response.length + 'Reviews');
+              }
             });
             $(this).removeClass('hide').addClass('show');
             $(this).html('Hide');
