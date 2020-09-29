@@ -25,15 +25,33 @@ $(document).ready(function () {
         $('.title_box .price_by_night')
           .last()
           .html('$' + place.price_by_night);
-        $('.information .max_guest')
-          .last()
-          .html(place.max_guest + ' Guests');
-        $('.information .number_rooms')
-          .last()
-          .html(place.number_rooms + ' Rooms');
-        $('.information .number_bathrooms')
-          .last()
-          .html(place.number_bathrooms + ' Bathrooms');
+        if (place.max_guest === 1) {
+          $('.information .max_guest')
+            .last()
+            .html(place.max_guest + ' Guest');
+        } else {
+          $('.information .max_guest')
+            .last()
+            .html(place.max_guest + ' Guests');
+        }
+        if (place.number_rooms === 1) {
+          $('.information .number_rooms')
+            .last()
+            .html(place.number_rooms + ' Room');
+        } else {
+          $('.information .number_rooms')
+            .last()
+            .html(place.number_rooms + ' Rooms');
+        }
+        if (place.number_bathrooms === 1) {
+          $('.information .number_bathrooms')
+            .last()
+            .html(place.number_bathrooms + ' Bathroom');
+        } else {
+          $('.information .number_bathrooms')
+            .last()
+            .html(place.number_bathrooms + ' Bathrooms');
+        }
         $('.description').last().html(place.description);
       });
     }
